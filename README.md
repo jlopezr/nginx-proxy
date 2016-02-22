@@ -123,7 +123,9 @@ a 503.
 
 To serve traffic in both SSL and non-SSL modes without redirecting to SSL, you can include the
 environment variable `HTTPS_METHOD=noredirect` (the default is `HTTPS_METHOD=redirect`).  You can also
-disable the non-SSL site entirely with `HTTPS_METHOD=nohttp`. 
+disable the non-SSL site entirely with `HTTPS_METHOD=nohttp`. In the case of noredirect method, you can
+provide a custom per-virtual-host configuration for the non-SSL site. This allows to serve different
+content in SSL and non-SSL modes.
 
 ### Basic Authentication Support
 
@@ -197,6 +199,8 @@ If you are using multiple hostnames for a single container (e.g. `VIRTUAL_HOST=e
     $ { echo 'server_tokens off;'; echo 'client_max_body_size 100m;'; } > /path/to/vhost.d/www.example.com
     $ ln -s /path/to/vhost.d/www.example.com /path/to/vhost.d/example.com
 
+If you want to specify a custom configuration for the non-SSL mode, the file name has to be `VIRTUAL_HOST_http`. Location can also be tweaked with the file `VIRTUAL_HOST_http_location`.
+
 #### Per-VIRTUAL_HOST default configuration
 
 If you want most of your virtual hosts to use a default single configuration and then override on a few specific ones, add those settings to the `/etc/nginx/vhost.d/default` file. This file
@@ -216,6 +220,7 @@ If you are using multiple hostnames for a single container (e.g. `VIRTUAL_HOST=e
 
     $ { echo 'proxy_cache my-cache;'; echo 'proxy_cache_valid  200 302  60m;'; echo 'proxy_cache_valid  404 1m;' } > /path/to/vhost.d/app.example.com_location
     $ ln -s /path/to/vhost.d/www.example.com /path/to/vhost.d/example.com
+
 
 #### Per-VIRTUAL_HOST location default configuration
 
